@@ -11,7 +11,7 @@
             --theme-primary: #00ced1;   
             --theme-bg: #e6f4f1;        
             --theme-text: #155e75;      
-            --birthday-gold: #f59e0b;   /* 生日專用金色 */
+            --birthday-gold: #f59e0b;   
         }
 
         html, body {
@@ -110,7 +110,7 @@
             </nav>
         </div>
         <div class="flex items-center gap-3">
-            <button onclick="toggleDrawer()" class="text-[10px] text-gray-200 hover:text-cyan-300">Admin</button>
+            <button onclick="toggleDrawer()" class="w-6 h-6 flex items-center justify-center text-xs text-gray-200 hover:text-cyan-300 transition font-bold">+</button>
         </div>
     </header>
 
@@ -157,16 +157,16 @@
         function openModal(event) {
             const title = event.extendedProps.description || event.title;
             const date = event.startStr;
-            const isBirthday = event.classNames.includes('event-birthday');
+            // 檢查是否包含 event-birthday 類別
+            const isBirthday = event.classNames && event.classNames.includes('event-birthday');
             
             document.getElementById('modal-title').innerText = title;
             
-            // 如果是生日，隱藏官網按鈕
             const linkBtn = document.getElementById('modal-link');
             if (isBirthday) {
-                linkBtn.classList.add('hidden');
+                linkBtn.style.display = 'none';
             } else {
-                linkBtn.classList.remove('hidden');
+                linkBtn.style.display = 'block';
                 linkBtn.href = event.url || "https://hakoniwalily.jp/news/";
             }
             
