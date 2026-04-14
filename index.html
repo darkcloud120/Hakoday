@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ハコリリ 活動行事曆</title>
+    <title>ハコリリ活動行事曆</title>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html, body { margin: 0; padding: 0; height: 100%; background: #fffafb; overflow: hidden; }
+        html, body { margin: 0; padding: 0; height: 100%; background: #06D76C; overflow: hidden; }
         #calendar-container { height: calc(100vh - 64px); padding: 10px; box-sizing: border-box; }
-        .fc-event { cursor: pointer !important; background-color: #ff69b4 !important; border: none !important; }
-        .fc-toolbar-title { font-size: 1.2em !important; font-weight: bold; color: #db2777; }
+        .fc-event { cursor: pointer !important; background-color: #06D76C !important; border: none !important; }
+        .fc-toolbar-title { font-size: 1.2em !important; font-weight: bold; color: #06D76C; }
         .modal-overlay { background: rgba(0,0,0,0.5); display: none; }
         .modal-overlay.active { display: flex; }
     </style>
@@ -18,8 +18,8 @@
 <body class="font-sans">
 
     <header class="h-16 flex items-center justify-between px-6 bg-white shadow-sm border-b border-pink-100">
-        <h1 class="text-xl font-black text-pink-600 tracking-tighter">ハコリリ 非官方行事曆</h1>
-        <button onclick="toggleDrawer()" class="text-[10px] text-gray-200">Admin</button>
+        <h1 class="text-xl font-black text-pink-600 tracking-tighter">ハコリリ活動行事曆</h1>
+        <button onclick="toggleDrawer()" class="text-[10px] text-gray-200">-</button>
     </header>
 
     <div id="calendar-container">
@@ -32,7 +32,7 @@
             <p id="modal-title" class="text-gray-800 font-bold text-lg leading-relaxed mb-6"></p>
             <div class="flex gap-2">
                 <button onclick="closeModal()" class="flex-1 bg-gray-100 py-3 rounded-xl text-gray-400 font-bold">關閉</button>
-                <a id="modal-link" href="#" target="_blank" class="flex-1 bg-pink-500 py-3 rounded-xl text-white text-center font-bold shadow-lg shadow-pink-200">開啟官網</a>
+                <a id="modal-link" href="#" target="_blank" class="flex-1 bg-pink-500 py-3 rounded-xl text-white text-center font-bold shadow-lg shadow-pink-200">官網</a>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
         <div class="max-w-md mx-auto flex gap-2">
             <input type="text" id="mt" placeholder="活動標題" class="border p-2 flex-1 rounded text-sm">
             <input type="date" id="md" class="border p-2 rounded text-sm">
-            <button onclick="gen()" class="bg-pink-500 text-white px-4 rounded text-sm">生成代碼</button>
+            <button onclick="gen()" class="bg-pink-500 text-white px-4 rounded text-sm">生成</button>
         </div>
         <textarea id="mo" class="w-full mt-2 hidden text-[10px] font-mono border p-2 h-16"></textarea>
     </div>
