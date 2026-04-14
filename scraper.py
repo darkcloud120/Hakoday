@@ -7,7 +7,7 @@ def scrape_hakolili():
     url = "https://hakoniwalily.jp/news/"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     
-    print("🚀 執行標題去數字計畫...")
+    print("🚀 執行標題終極淨化...")
     try:
         res = requests.get(url, headers=headers)
         res.encoding = 'utf-8'
@@ -34,8 +34,8 @@ def scrape_hakolili():
                 if "タイトル" in line and i + 1 < len(lines):
                     potential = lines[i+1]
                     if "▼" not in potential and "【" not in potential:
-                        # 刪除任何格式的日期數字 (例如 04.02.2026 或 2026.04.02)
-                        p = re.sub(r'^\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', potential)
+                        # 核心修正：不論位置，刪除所有 00.00.0000 格式的數字
+                        p = re.sub(r'\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', potential)
                         p = p.replace('NEWSEVENT', '').replace('{NEWS}{EVENT}', '').strip()
                         event_title = p
                 
@@ -44,11 +44,13 @@ def scrape_hakolili():
                     if match:
                         event_date = f"{match.group(1)}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
 
-            # 最終清洗：如果標題開頭還是有數字點 (如 04.02...)
+            # 如果內文標題沒抓到，改抓列表標題並進行強力清洗
             if not event_title:
                 event_title = a.get_text(strip=True).split('開催決定')[0]
             
-            event_title = re.sub(r'^\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', event_title).strip()
+            # 再次確保刪除所有數字日期與雜訊
+            event_title = re.sub(r'\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', event_title)
+            event_title = event_title.replace('NEWSEVENT', '').strip()
 
             events.append({
                 "title": event_title,
@@ -60,7 +62,7 @@ def scrape_hakolili():
 
         with open('events.json', 'w', encoding='utf-8') as f:
             json.dump(events, f, ensure_ascii=False, indent=4)
-        print(f"✨ 成功解析 {len(events)} 個純淨活動。")
+        print(f"✨ 標題已洗淨。共存入 {len(events)} 個活動。")
 
     except Exception as e:
         print(f"❌ 錯誤: {e}")
