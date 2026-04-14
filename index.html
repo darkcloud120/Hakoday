@@ -50,3 +50,35 @@
     </script>
 </body>
 </html>
+
+
+<div class="container mx-auto p-4">
+    <div class="bg-blue-50 p-4 mb-4 rounded-lg border border-blue-200">
+        <h2 class="font-bold mb-2">➕ 手動新增活動工具</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+            <input type="text" id="m-title" placeholder="活動名稱" class="p-2 border rounded">
+            <input type="date" id="m-date" class="p-2 border rounded">
+            <input type="text" id="m-url" placeholder="連結(選填)" class="p-2 border rounded">
+            <button onclick="generateJSON()" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">產生代碼</button>
+        </div>
+        <textarea id="result-json" class="w-full mt-2 p-2 text-xs font-mono hidden" readonly></textarea>
+        <p id="tip" class="text-xs text-gray-500 mt-1 hidden">請複製上方內容，貼上到 GitHub 的 manual_events.json 檔案中。</p>
+    </div>
+    <div id="calendar"></div>
+</div>
+
+<script>
+function generateJSON() {
+    const title = document.getElementById('m-title').value;
+    const date = document.getElementById('m-date').value;
+    const url = document.getElementById('m-url').value || "#";
+    if(!title || !date) return alert("請輸入名稱與日期");
+    
+    const obj = [{ "title": "⭐ " + title, "start": date, "url": url, "source": "manual", "color": "#6495ED" }];
+    const box = document.getElementById('result-json');
+    box.value = JSON.stringify(obj, null, 2);
+    box.classList.remove('hidden');
+    document.getElementById('tip').classList.remove('hidden');
+}
+</script>
+
