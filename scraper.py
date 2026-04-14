@@ -7,7 +7,7 @@ def scrape_hakolili():
     url = "https://hakoniwalily.jp/news/"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     
-    print("🚀 啟動標題終極淨化...")
+    print("🚀 執行標題去數字計畫...")
     try:
         res = requests.get(url, headers=headers)
         res.encoding = 'utf-8'
@@ -34,8 +34,8 @@ def scrape_hakolili():
                 if "タイトル" in line and i + 1 < len(lines):
                     potential = lines[i+1]
                     if "▼" not in potential and "【" not in potential:
-                        # 刪除所有日期數字、標籤、以及常見雜質
-                        p = re.sub(r'\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', potential)
+                        # 刪除任何格式的日期數字 (例如 04.02.2026 或 2026.04.02)
+                        p = re.sub(r'^\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', potential)
                         p = p.replace('NEWSEVENT', '').replace('{NEWS}{EVENT}', '').strip()
                         event_title = p
                 
@@ -44,16 +44,18 @@ def scrape_hakolili():
                     if match:
                         event_date = f"{match.group(1)}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
 
+            # 最終清洗：如果標題開頭還是有數字點 (如 04.02...)
             if not event_title:
                 event_title = a.get_text(strip=True).split('開催決定')[0]
-                event_title = re.sub(r'\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', event_title).strip()
+            
+            event_title = re.sub(r'^\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', event_title).strip()
 
             events.append({
                 "title": event_title,
                 "start": event_date if event_date else "2026-04-14",
                 "url": full_url,
                 "allDay": True,
-                "description": event_title # 多存一份完整標題供彈窗使用
+                "description": event_title 
             })
 
         with open('events.json', 'w', encoding='utf-8') as f:
