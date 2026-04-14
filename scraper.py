@@ -7,7 +7,7 @@ def scrape_hakolili():
     url = "https://hakoniwalily.jp/news/"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     
-    print("🚀 執行標題終極淨化...")
+    print("🚀 執行標題強力淨化：清除所有潛在日期數字...")
     try:
         res = requests.get(url, headers=headers)
         res.encoding = 'utf-8'
@@ -34,8 +34,8 @@ def scrape_hakolili():
                 if "タイトル" in line and i + 1 < len(lines):
                     potential = lines[i+1]
                     if "▼" not in potential and "【" not in potential:
-                        # 核心修正：不論位置，刪除所有 00.00.0000 格式的數字
-                        p = re.sub(r'\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', potential)
+                        # 核心清洗：刪除所有 00.00.0000 格式的數字，包含前後可能夾雜的雜質
+                        p = re.sub(r'\d{1,4}[\.\/\-\s]+\d{1,2}[\.\/\-\s]+\d{1,4}', '', potential)
                         p = p.replace('NEWSEVENT', '').replace('{NEWS}{EVENT}', '').strip()
                         event_title = p
                 
@@ -44,12 +44,14 @@ def scrape_hakolili():
                     if match:
                         event_date = f"{match.group(1)}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
 
-            # 如果內文標題沒抓到，改抓列表標題並進行強力清洗
+            # 如果標題抓取失敗或仍包含雜質，進行最後兜底清洗
             if not event_title:
                 event_title = a.get_text(strip=True).split('開催決定')[0]
             
-            # 再次確保刪除所有數字日期與雜訊
-            event_title = re.sub(r'\d{1,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,4}', '', event_title)
+            # 強力正則：刪除任何長得像日期的數字組合
+            event_title = re.sub(r'\d{1,4}[\.\/\-\s]+\d{1,2}[\.\/\-\s]+\d{1,4}', '', event_title)
+            # 刪除剩餘零散的日期後綴
+            event_title = re.sub(r'^\d{2}\.\d{2}\s*', '', event_title)
             event_title = event_title.replace('NEWSEVENT', '').strip()
 
             events.append({
