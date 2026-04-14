@@ -10,7 +10,7 @@
         :root {
             --theme-primary: #00ced1;   /* Hanon 亮藍綠 */
             --theme-secondary: #ccfbf1; /* 淡薄荷綠 */
-            --theme-bg: #e6f4f1;        /* 質感底色 (稍微深且偏綠) */
+            --theme-bg: #e6f4f1;        /* 質感底色 */
             --theme-text: #155e75;      /* 深藍綠文字 */
         }
 
@@ -21,7 +21,6 @@
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
         }
 
-        /* 日曆容器佈局 */
         #calendar-container {
             height: calc(100vh - 64px);
             padding: 12px;
@@ -37,7 +36,9 @@
             overflow: hidden;
         }
 
-        /* 標題與按鈕美化 */
+        /* 隱藏活動上的時間標籤 (包含 "all-day" 文字) */
+        .fc-event-time { display: none !important; }
+
         .fc-toolbar-title {
             font-size: 1.2em !important;
             font-weight: 800;
@@ -58,7 +59,6 @@
             color: white !important;
         }
 
-        /* 活動條樣式 */
         .fc-event {
             cursor: pointer !important;
             background-color: var(--theme-primary) !important;
@@ -74,7 +74,6 @@
             filter: brightness(1.05);
         }
 
-        /* 彈窗毛玻璃效果 */
         .modal-overlay {
             background-color: rgba(15, 23, 42, 0.6);
             display: none;
@@ -100,13 +99,13 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h5M7 12h8M7 16h8"></path></svg>
                 </a>
                 <a href="https://www.youtube.com/@%E3%81%93%E3%81%A8%E3%81%AF%E3%81%AE%E3%81%9F%E3%81%93%E7%84%BC%E3%81%8D" target="_blank" class="text-xs font-bold text-red-500 hover:text-red-400 flex items-center gap-1 transition">
-                    <span class="hidden md:inline">作者頻道</span>
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    <span class="hidden md:inline">我的頻道</span>
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.376-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                 </a>
             </nav>
         </div>
         
-        <button onclick="toggleDrawer()" class="text-[10px] text-gray-200 hover:text-cyan-300">+</button>
+        <button onclick="toggleDrawer()" class="text-[10px] text-gray-200 hover:text-cyan-300">Admin</button>
     </header>
 
     <div id="calendar-container">
@@ -136,7 +135,6 @@
     </div>
 
     <script>
-        // UI 互動
         function toggleDrawer() { document.getElementById('drawer').classList.toggle('translate-y-0'); }
         function closeModal() { document.getElementById('modal').classList.remove('active'); }
         
@@ -155,12 +153,12 @@
             out.classList.remove('hidden');
         }
 
-        // 初始化日曆
         document.addEventListener('DOMContentLoaded', function() {
             var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
                 initialView: 'dayGridMonth',
                 locale: 'zh-tw',
                 height: '100%',
+                displayEventTime: false, // 核心修改：不顯示時間，解決 "all-day" 問題
                 headerToolbar: { 
                     left: 'prev,next', 
                     center: 'title', 
@@ -182,7 +180,6 @@
             calendar.render();
         });
 
-        // 點擊空白處關閉
         document.getElementById('modal').addEventListener('click', function(e) {
             if(e.target === this) closeModal();
         });
