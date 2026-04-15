@@ -148,9 +148,9 @@
                 <input type="text" id="mt" placeholder="活動標題" class="border p-2 rounded-lg text-sm col-span-2 focus:border-cyan-400 outline-none">
                 <input type="date" id="ms" class="border p-2 rounded-lg text-sm" title="開始日期">
                 <input type="date" id="me" class="border p-2 rounded-lg text-sm" title="結束日期 (跨日才填)">
-                <input type="text" id="mi" placeholder="海報圖片網址 (選填)" class="border p-2 rounded-lg text-sm col-span-2 focus:border-cyan-400 outline-none">
-                <input type="text" id="mu" placeholder="詳情連結網址 (推特/官網...)" class="border p-2 rounded-lg text-sm col-span-2 focus:border-cyan-400 outline-none">
-                <button onclick="genJSON()" class="bg-cyan-500 text-white p-2 rounded-lg font-bold col-span-2 hover:bg-cyan-600 transition">生成手動活動 JSON</button>
+                <input type="text" id="mi" placeholder="海報圖片網址 " class="border p-2 rounded-lg text-sm col-span-2 focus:border-cyan-400 outline-none">
+                <input type="text" id="mu" placeholder="詳情連結網址 " class="border p-2 rounded-lg text-sm col-span-2 focus:border-cyan-400 outline-none">
+                <button onclick="genJSON()" class="bg-cyan-500 text-white p-2 rounded-lg font-bold col-span-2 hover:bg-cyan-600 transition">生成</button>
             </div>
             <textarea id="mo" class="w-full hidden text-[10px] font-mono border p-2 h-24 bg-gray-50 mb-2 rounded" readonly></textarea>
             <p id="copy-tip" class="text-[10px] text-cyan-600 text-center hidden mb-2">生成成功！請複製內容並貼到 manual_events.json</p>
