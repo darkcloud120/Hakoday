@@ -197,33 +197,39 @@
             document.getElementById('modal').classList.add('active');
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentYear = new Date().getFullYear();
-            const bdays = [];
-            for(let i=0; i<5; i++){
-                bdays.push({ title: "🎂 Hanon Birthday", start: `${currentYear+i}-03-06`, className: "event-birthday", description: "Hanon 生日快樂！🐧" });
-                bdays.push({ title: "🎂 Kotoha Birthday", start: `${currentYear+i}-06-10`, className: "event-birthday", description: "Kotoha 生日快樂！🍀" });
-            }
+document.addEventListener('DOMContentLoaded', function() {
+    const currentYear = new Date().getFullYear();
+    const bdays = [];
+    for(let i=0; i<5; i++){
+        bdays.push({ title: "🎂 Hanon Birthday", start: `${currentYear+i}-03-06`, className: "event-birthday", description: "Hanon 生日快樂！🎤" });
+        bdays.push({ title: "🎂 Kotoha Birthday", start: `${currentYear+i}-06-10`, className: "event-birthday", description: "Kotoha 生日快樂！🐙" });
+    }
 
-            var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-                initialView: 'dayGridMonth',
-                locale: 'zh-tw',
-                height: '100%',
-                displayEventTime: false,
-                headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth,listYear' },
-                buttonText: { month: '日曆', list: '清單' },
-                events: bdays,
-                eventSources: [
-                    { url: 'events.json?v=' + Date.now() },
-                    { url: 'manual_events.json?v=' + Date.now() }
-                ],
-                eventClick: function(info) {
-                    info.jsEvent.preventDefault();
-                    openModal(info.event);
-                }
-            });
-            calendar.render();
-        });
+    var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+        initialView: 'dayGridMonth',
+        locale: 'zh-tw',
+        height: '100%',
+        displayEventTime: false,
+        
+        // --- 加入這兩行 ---
+        showNonCurrentDates: false,  // 不顯示非本月的日期
+        fixedMirrorParent: true,      // (選填) 確保拖拉時不會跑位
+        // -----------------
+
+        headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth,listYear' },
+        buttonText: { month: '日曆', list: '清單' },
+        events: bdays,
+        eventSources: [
+            { url: 'events.json?v=' + Date.now() },
+            { url: 'manual_events.json?v=' + Date.now() }
+        ],
+        eventClick: function(info) {
+            info.jsEvent.preventDefault();
+            openModal(info.event);
+        }
+    });
+    calendar.render();
+});
 
         window.onclick = function(e) { if(e.target.classList.contains('modal-overlay')) closeModal(); }
 
