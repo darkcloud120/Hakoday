@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <link rel="icon" href="https://yt3.googleusercontent.com/sLrOQHzzr6YL4VHb3iOjB9lGPbZb775QaNgljZQQWu9Fw5AVwErgkt-GlKDWxOYtMWKT_QjoAA=s160-c-k-c0x00ffffff-no-rj" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ハコリリ活動行事曆</title>
@@ -35,6 +34,14 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             border: 1px solid #b2ebf2;
             overflow: hidden;
+        }
+
+        /* 移除日期數字後的 "日" */
+        .fc-daygrid-day-number {
+            text-decoration: none !important;
+            color: var(--theme-text) !important;
+            font-weight: 600;
+            padding: 8px !important;
         }
 
         .fc-event-time { display: none !important; }
@@ -133,9 +140,7 @@
             
             <div class="flex flex-col gap-2">
                 <a id="modal-link" href="#" target="_blank" class="w-full bg-cyan-500 py-3 rounded-xl text-white font-bold hover:bg-cyan-600 transition">查看活動詳情</a>
-                
                 <button id="btn-gcal" class="w-full bg-white border-2 border-cyan-100 py-3 rounded-xl text-cyan-600 font-bold hover:bg-cyan-50 transition flex items-center justify-center gap-2 text-sm">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>
                     加入我的 Google 日曆
                 </button>
                 <button onclick="closeModal()" class="w-full py-2 text-gray-400 text-sm font-medium mt-1">關閉</button>
@@ -146,15 +151,14 @@
     <div id="drawer" class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 transform translate-y-full transition-transform duration-300 z-[1100] shadow-inner">
         <div class="max-w-md mx-auto">
             <div class="grid grid-cols-2 gap-2 mb-2">
-                <input type="text" id="mt" placeholder="活動標題" class="border p-2 rounded-lg text-sm col-span-2 focus:border-cyan-400 outline-none">
+                <input type="text" id="mt" placeholder="活動標題" class="border p-2 rounded-lg text-sm col-span-2">
                 <input type="date" id="ms" class="border p-2 rounded-lg text-sm" title="開始日期">
-                <input type="date" id="me" class="border p-2 rounded-lg text-sm" title="結束日期 (跨日才填)">
-                <input type="text" id="mi" placeholder="海報圖片網址 " class="border p-2 rounded-lg text-sm col-span-2 focus:border-cyan-400 outline-none">
-                <input type="text" id="mu" placeholder="詳情連結網址 " class="border p-2 rounded-lg text-sm col-span-2 focus:border-cyan-400 outline-none">
-                <button onclick="genJSON()" class="bg-cyan-500 text-white p-2 rounded-lg font-bold col-span-2 hover:bg-cyan-600 transition">生成</button>
+                <input type="date" id="me" class="border p-2 rounded-lg text-sm" title="結束日期">
+                <input type="text" id="mi" placeholder="海報圖片網址 (選填)" class="border p-2 rounded-lg text-sm col-span-2">
+                <input type="text" id="mu" placeholder="詳情連結網址" class="border p-2 rounded-lg text-sm col-span-2">
+                <button onclick="genJSON()" class="bg-cyan-500 text-white p-2 rounded-lg font-bold col-span-2">生成 JSON</button>
             </div>
-            <textarea id="mo" class="w-full hidden text-[10px] font-mono border p-2 h-24 bg-gray-50 mb-2 rounded" readonly></textarea>
-            <p id="copy-tip" class="text-[10px] text-cyan-600 text-center hidden mb-2">生成成功！請複製內容並貼到 manual_events.json</p>
+            <textarea id="mo" class="w-full hidden text-[10px] font-mono border p-2 h-20 bg-gray-50 mb-2" readonly></textarea>
         </div>
     </div>
 
@@ -171,7 +175,7 @@
             const title = event.extendedProps.description || event.title;
             const date = event.startStr;
             const img = event.extendedProps.image;
-            const url = event.url || event.extendedProps.url; // 支援手動新增的 url 屬性
+            const url = event.url || event.extendedProps.url;
             const isBirthday = event.classNames && event.classNames.includes('event-birthday');
             
             document.getElementById('modal-title').innerText = title;
@@ -190,7 +194,6 @@
                 linkBtn.style.display = 'none';
             } else {
                 linkBtn.style.display = 'block';
-                // 優先使用資料中的 url，若無則跳官網新聞頁
                 linkBtn.href = url || "https://hakoniwalily.jp/news/";
             }
             
@@ -198,39 +201,37 @@
             document.getElementById('modal').classList.add('active');
         }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const currentYear = new Date().getFullYear();
-    const bdays = [];
-    for(let i=0; i<5; i++){
-        bdays.push({ title: "🎂 Hanon Birthday", start: `${currentYear+i}-03-06`, className: "event-birthday", description: "Hanon 生日快樂！🐧" });
-        bdays.push({ title: "🎂 Kotoha Birthday", start: `${currentYear+i}-06-10`, className: "event-birthday", description: "Kotoha 生日快樂！🍀" });
-    }
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentYear = new Date().getFullYear();
+            const bdays = [];
+            for(let i=0; i<5; i++){
+                bdays.push({ title: "🎂 Hanon Birthday", start: `${currentYear+i}-03-06`, className: "event-birthday", description: "Hanon 生日快樂！🐧" });
+                bdays.push({ title: "🎂 Kotoha Birthday", start: `${currentYear+i}-06-10`, className: "event-birthday", description: "Kotoha 生日快樂！🍀" });
+            }
 
-    var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-        initialView: 'dayGridMonth',
-        locale: 'zh-tw',
-        height: '100%',
-        displayEventTime: false,
-        
-        // --- 加入這兩行 ---
-        showNonCurrentDates: false,  // 不顯示非本月的日期
-        fixedMirrorParent: true,      // (選填) 確保拖拉時不會跑位
-        // -----------------
-
-        headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth,listYear' },
-        buttonText: { month: '日曆', list: '清單' },
-        events: bdays,
-        eventSources: [
-            { url: 'events.json?v=' + Date.now() },
-            { url: 'manual_events.json?v=' + Date.now() }
-        ],
-        eventClick: function(info) {
-            info.jsEvent.preventDefault();
-            openModal(info.event);
-        }
-    });
-    calendar.render();
-});
+            var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+                initialView: 'dayGridMonth',
+                locale: 'zh-tw',
+                height: '100%',
+                displayEventTime: false,
+                dayCellContent: function(arg) {
+                    // 只返回數字部分，移除 "日"
+                    return arg.date.getDate();
+                },
+                headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth,listYear' },
+                buttonText: { month: '日曆', list: '清單' },
+                events: bdays,
+                eventSources: [
+                    { url: 'events.json?v=' + Date.now() },
+                    { url: 'manual_events.json?v=' + Date.now() }
+                ],
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault();
+                    openModal(info.event);
+                }
+            });
+            calendar.render();
+        });
 
         window.onclick = function(e) { if(e.target.classList.contains('modal-overlay')) closeModal(); }
 
@@ -239,16 +240,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const e = document.getElementById('me').value, i = document.getElementById('mi').value;
             const u = document.getElementById('mu').value;
             if(!t || !s) return;
-            
             const eventObj = { "title": t, "start": s, "description": t };
             if(e) eventObj.end = e;
             if(i) eventObj.image = i;
-            if(u) eventObj.url = u; // 存入自定義網址
-            
+            if(u) eventObj.url = u;
             const out = document.getElementById('mo');
             out.value = JSON.stringify([eventObj], null, 2);
             out.classList.remove('hidden');
-            document.getElementById('copy-tip').classList.remove('hidden');
         }
     </script>
 </body>
