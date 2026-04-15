@@ -15,27 +15,31 @@
             --birthday-gold: #f59e0b;   
         }
 
-        html, body {
-            margin: 0; padding: 0; height: 100%;
-            background-color: var(--theme-bg);
-            overflow: hidden;
-            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
-        }
+html, body {
+        margin: 0; padding: 0; 
+        /* 修改這裡：使用 dvh 確保在手機上高度正確 */
+        height: 100dvh; 
+        background-color: var(--theme-bg);
+        overflow: hidden;
+        font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
 
-        #calendar-container {
-            height: calc(100vh - 64px);
-            padding: 12px;
-            box-sizing: border-box;
-        }
+    #calendar-container {
+        /* 修改這裡：同樣使用 dvh，並稍微增加底部的 padding 防止被邊緣切到 */
+        height: calc(100dvh - 64px); 
+        padding: 12px 12px 24px 12px; 
+        box-sizing: border-box;
+    }
 
-        .fc {
-            height: 100%;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-            border: 1px solid #b2ebf2;
-            overflow: hidden;
-        }
+    /* 針對清單模式 (List View) 的微調，確保內容可以捲動 */
+    .fc-view-harness {
+        height: 100% !important;
+    }
+    
+    .fc-scroller {
+        overflow-y: auto !important;
+    }
+
 
         /* 移除日期數字後的 "日" */
         .fc-daygrid-day-number {
