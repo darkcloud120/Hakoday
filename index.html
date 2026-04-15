@@ -233,7 +233,7 @@
             const u = document.getElementById('mu').value;
             if(!t || !s) return;
             
-            const eventObj = { "title": "⭐ "+t, "start": s, "description": t };
+            const eventObj = { "title": t, "start": s, "description": t };
             if(e) eventObj.end = e;
             if(i) eventObj.image = i;
             if(u) eventObj.url = u; // 存入自定義網址
