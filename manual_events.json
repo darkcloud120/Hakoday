@@ -174,5 +174,13 @@
     "description": "『Anime Festival Asia Thailand 2026』",
     "image": "https://pbs.twimg.com/media/HD4RxA2boAIc6pQ?format=jpg&name=large",
     "url": "https://animefestival.asia/afath26/"
+  },
+  {
+    "title": "「Animelo Summer Live 2026 -Messenger-」",
+    "start": "2026-07-12",
+    "description": "「Animelo Summer Live 2026 -Messenger-」",
+    "allDay": true,
+    "image": "https://pbs.twimg.com/media/HGBqVq6aMAEpYsY?format=jpg&name=4096x4096",
+    "url": "https://anisama.tv/2026/"
   }
 ]
